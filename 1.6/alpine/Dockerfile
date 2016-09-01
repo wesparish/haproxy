@@ -15,6 +15,7 @@ RUN set -x \
 		openssl-dev \
 		pcre-dev \
 		zlib-dev \
+		rsyslog \
 	&& curl -SL "http://www.haproxy.org/download/${HAPROXY_MAJOR}/src/haproxy-${HAPROXY_VERSION}.tar.gz" -o haproxy.tar.gz \
 	&& echo "${HAPROXY_MD5}  haproxy.tar.gz" | md5sum -c \
 	&& mkdir -p /usr/src \
@@ -40,6 +41,10 @@ RUN set -x \
 	)" \
 	&& apk add --virtual .haproxy-rundeps $runDeps \
 	&& apk del .build-deps
+
+RUN set -x \
+	&& apk add --no-cache --virtual .build-deps \
+		rsyslog
 
 COPY docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
